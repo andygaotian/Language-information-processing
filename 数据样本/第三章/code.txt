@@ -1,0 +1,65 @@
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'代码块 1
+'以下代码用于将《康熙字典》中注释部分错误换行还原
+'涉及vba知识：len函数、删除行
+Sub 断行修复()
+For i = 2 To Cells(65536, 1).End(xlUp).Row
+    zi = Cells(i, 1)
+    If Len(zi) > 4 And Cells(i, 2) = "" Then
+        Cells(i - 1, 4) = Cells(i - 1, 4) & zi
+        Rows(i).Delete
+    End If
+Next i
+End Sub
+
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'代码块 2
+'以下代码用于《康熙字典》出处切分
+'将【考證】【丑集中】【土字部】切分开来
+'并放到指定列
+'涉及VBA知识：split函数、数组
+Sub split_src()
+For i = 2 To Cells(65536, 1).End(xlUp).Row
+    src = Cells(i, 5)
+    arr_src = Split(src, "】【")
+    If UBound(arr_src) = 1 Then
+        Cells(i, 3) = arr_src(0)
+        Cells(i, 4) = arr_src(1)
+    Else
+        Cells(i, 2) = arr_src(0)
+        Cells(i, 3) = arr_src(1)
+        Cells(i, 4) = arr_src(2)
+    End If
+Next i
+End Sub
+
+
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'代码块 2
+'本段代码用于将编、集、部编号替换到data表中
+Sub get_id()
+src_col = 2
+tar_sheet = "BIAN"
+For i = 2 To Cells(65536, 1).End(xlUp).Row
+    src = Cells(i, src_col)
+    If Cells(i, src_col) <> Cells(i - 1, src_col) Then
+        For J = 2 To Worksheets("BIAN").Cells(65536, 1).End(xlUp).Row
+            If Cells(i, src_col) = Worksheets("BIAN").Cells(J, 2) Then
+                Cells(i, src_col) = Worksheets("BIAN").Cells(J, 1)
+                Exit For
+            End If
+        Next J
+        
+        For m = i + 1 To i + 2000
+            If src = Cells(m, src_col) Then
+                Cells(m, src_col) = Cells(i, src_col)
+            Else
+                i = m - 1
+                Exit For
+            End If
+        Next m
+    End If
+Next i
+End Sub
