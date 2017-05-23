@@ -3,10 +3,10 @@
 '以下代码用于将《康熙字典》中注释部分错误换行还原
 '涉及vba知识：len函数、删除行
 Sub 断行修复()
-For i = 2 To Cells(65536, 1).End(xlUp).Row
+For i = 7747 To Cells(65536, 1).End(xlUp).Row
     zi = Cells(i, 1)
     If Len(zi) > 4 And Cells(i, 2) = "" Then
-        Cells(i - 1, 4) = Cells(i - 1, 4) & zi
+        Cells(i - 1, 6) = Cells(i - 1, 6) & zi
         Rows(i).Delete
     End If
 Next i
@@ -37,17 +37,17 @@ End Sub
 
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''
-'代码块 2
+'代码块 3
 '本段代码用于将编、集、部编号替换到data表中
 Sub get_id()
-src_col = 2
-tar_sheet = "BIAN"
+src_col = 5
+tar_sheet = "bu"
 For i = 2 To Cells(65536, 1).End(xlUp).Row
     src = Cells(i, src_col)
     If Cells(i, src_col) <> Cells(i - 1, src_col) Then
-        For J = 2 To Worksheets("BIAN").Cells(65536, 1).End(xlUp).Row
-            If Cells(i, src_col) = Worksheets("BIAN").Cells(J, 2) Then
-                Cells(i, src_col) = Worksheets("BIAN").Cells(J, 1)
+        For J = 2 To Worksheets(tar_sheet).Cells(65536, 1).End(xlUp).Row
+            If Cells(i, src_col) = Worksheets(tar_sheet).Cells(J, 2) Then
+                Cells(i, src_col) = Worksheets(tar_sheet).Cells(J, 1)
                 Exit For
             End If
         Next J
@@ -60,6 +60,25 @@ For i = 2 To Cells(65536, 1).End(xlUp).Row
                 Exit For
             End If
         Next m
+    End If
+Next i
+End Sub
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'代码块 4
+'本段代码用于修复部分四字节字被错转为？？的情况
+Sub fixzi()
+
+For i = 2 To Cells(65536, 1).End(xlUp).Row
+    zi1 = Cells(i, 2)
+    zi2 = Cells(i, 6)
+    If zi1 <> zi2 Then
+        Rows(i).Font.Color = vbRed
+        If zi1 = "??" Then
+            Cells(i, 2) = Cells(i, 6)
+        ElseIf zi2 = "??" Then
+            Cells(i, 6) = Cells(i, 2)
+        End If
     End If
 Next i
 End Sub
