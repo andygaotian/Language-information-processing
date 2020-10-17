@@ -4,7 +4,7 @@
 
 #### 课件下载方法：
 
-在本页面上方红线下右侧，点击绿色按钮 `Clone or download`，弹出框中选`Download ZIP` 即可下载全部课件内容的压缩包。
+点击绿色按钮 `Clone or download`，弹出框中选`Download ZIP` 即可下载全部课件内容的压缩包。
 
 #### 文件说明：
 
